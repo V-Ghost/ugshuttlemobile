@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shuttleuserapp/Models/BusStops.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
 import 'package:shuttleuserapp/Models/users.dart';
+import 'package:shuttleuserapp/pages/ordering/ticket.dart';
 
 class DestinationBottomSheet extends StatefulWidget {
+  
   DestinationBottomSheet({Key key}) : super(key: key);
 
   _DestinationBottomSheetState createState() => _DestinationBottomSheetState();
@@ -78,17 +81,24 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
                     child: SizedBox(
                       height: 200.0,
                       child: ListView.builder(
-                         
                           itemCount: busStopsList.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
                                 padding:
                                     const EdgeInsets.only(left: 10, right: 10),
-                                child: ListTile(
-                                    leading: const Icon(Icons.location_on),
-                                    title: Text(busStopsList[index].name),
-                                    subtitle: Text(busStopsList[index].sub),
-                                    onTap: () {}));
+                                child: InkWell(
+                                  child: ListTile(
+                                      leading: const Icon(Icons.location_on),
+                                      title: Text(busStopsList[index].name),
+                                      subtitle: Text(busStopsList[index].sub),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              builder: (context) => Ticket()),
+                                        );
+                                      }),
+                                ));
                           }),
                     ),
                   );

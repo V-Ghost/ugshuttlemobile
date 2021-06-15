@@ -57,6 +57,7 @@ class _MapPageState extends State<MapPage> {
   bool hide;
   double opacity;
   bool details;
+  Shuttles selectedShuttle;
   String name;
   String bio;
   String user2;
@@ -66,6 +67,7 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     u = Provider.of<Users>(context, listen: false);
+    selectedShuttle = Provider.of<Shuttles>(context, listen: false);
     h = 80;
     p = 0;
     name = "";
