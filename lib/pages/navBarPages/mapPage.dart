@@ -230,18 +230,21 @@ class _MapPageState extends State<MapPage> {
                     //  print(distancefrom);
                     if (temp > distancefrom) {
                       temp = distancefrom;
-                      orderedShuttle = shuttle;
+                      selectedShuttle = shuttle;
+                      // print(shuttle.id);
+                      // print(selectedShuttle.id);
                     }
                     i++;
                   });
                  
                   if (temp < 400) {
+                   
                     showModalBottomSheet<void>(
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       builder: (BuildContext context) {
-                        return DestinationBottomSheet();
+                        return DestinationBottomSheet(shuttle: selectedShuttle,);
                       },
                     );
                   } else {

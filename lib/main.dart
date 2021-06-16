@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shuttleuserapp/Models/shuttles.dart';
 import 'package:shuttleuserapp/Models/users.dart';
 import 'package:shuttleuserapp/pages/landingPages/homepage.dart';
 import 'package:shuttleuserapp/pages/register/loginUi.dart';
@@ -49,6 +50,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Users().instance,
+        
+        ),
+
+        ChangeNotifierProvider.value(
+          value: Shuttles().instance,
+        
         ),
        
       ],

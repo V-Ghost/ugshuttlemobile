@@ -8,8 +8,8 @@ import 'package:shuttleuserapp/Models/users.dart';
 import 'package:shuttleuserapp/pages/ordering/ticket.dart';
 
 class DestinationBottomSheet extends StatefulWidget {
-  
-  DestinationBottomSheet({Key key}) : super(key: key);
+  final Shuttles shuttle;
+  DestinationBottomSheet({Key key,@required this.shuttle}) : super(key: key);
 
   _DestinationBottomSheetState createState() => _DestinationBottomSheetState();
 }
@@ -29,11 +29,10 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
 
     busStops.docs.forEach((busStop) {
       BusStops temp = BusStops.fromMap(busStop.data());
-      print("adeyy");
-      print(busStop.data());
+     
       busStopsList.add(temp);
     });
-    print(busStopsList.length);
+    
     return busStopsList;
   }
 
@@ -95,7 +94,7 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
                                         Navigator.push(
                                           context,
                                           CupertinoPageRoute(
-                                              builder: (context) => Ticket()),
+                                              builder: (context) => Ticket(shuttle: widget.shuttle,)),
                                         );
                                       }),
                                 ));

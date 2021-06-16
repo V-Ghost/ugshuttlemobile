@@ -6,7 +6,7 @@ String name;
 String latitude;
 String longitude;
 String sub;
-String regNo;
+
 BusStops();
 
 BusStops.fromMap(Map<String,dynamic> data){
@@ -14,7 +14,7 @@ BusStops.fromMap(Map<String,dynamic> data){
   sub = data['sub'];
   latitude = data['latitude'];
   longitude = data['longitude'];
-  regNo = data['regNo'];
+ 
   notifyListeners();
 }
 

@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:shuttleuserapp/Models/CoOrdinates.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
+import 'package:shuttleuserapp/Models/trip.dart';
 
 import 'package:shuttleuserapp/Models/userInfo.dart';
 import 'package:shuttleuserapp/Models/users.dart';
@@ -14,6 +15,7 @@ import 'package:geolocator/geolocator.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseService {
   final String uid;
@@ -81,6 +83,26 @@ class DatabaseService {
 
     return shuttlesList;
   }
+  
+
+  Future<dynamic> createTrip(Trip u) async{
+       try {
+       var uuid = Uuid();
+      await userCollection.doc(uid).collection("trips").doc(uuid.v1()).set({
+        'shuttle': u.shuttle,
+        'seat': u.seat,
+        'status': u.status,
+         'timestamp': u.timeStamp,
+      });
+      return true;
+    } catch (error) {
+      print(error.toString());
+      return error.toString();
+    }
+  }
+
+
+
 
   Future<void> saveDeviceToken() async {
     final FirebaseMessaging _fcm = FirebaseMessaging.instance;

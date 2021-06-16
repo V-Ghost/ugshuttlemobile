@@ -1,10 +1,6 @@
-
 import 'package:flutter/widgets.dart';
 
-
-
-class Shuttles extends ChangeNotifier
-{
+class Shuttles extends ChangeNotifier {
   String id;
   String lastMaintenance;
   double latitude;
@@ -12,9 +8,10 @@ class Shuttles extends ChangeNotifier
   String mileage;
   String model;
   String seats;
+  String regNo;
   Shuttles();
-  Shuttles.fromMap(Map<String,dynamic> data){
-   
+  Shuttles get instance => this;
+  Shuttles.fromMap(Map<String, dynamic> data) {
     id = data['id'];
     latitude = double.parse(data['latitude']);
     longitude = double.parse(data['longitude']);
@@ -22,10 +19,7 @@ class Shuttles extends ChangeNotifier
     model = data['model'];
     seats = data['seats'];
     lastMaintenance = data['lastMaintenance'].toString();
+     regNo = data['regNo'];
     notifyListeners();
   }
-
-
-
-
 }

@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
+import 'package:shuttleuserapp/widgets/raisedGradientButton.dart';
 import 'package:shuttleuserapp/widgets/seats.dart';
 
-class Ticket extends StatelessWidget {
+class Ticket extends StatefulWidget {
   final Shuttles shuttle;
-  const Ticket({Key key, this.shuttle}) : super(key: key);
+  Ticket({Key key, @required this.shuttle}) : super(key: key);
+
+  _TicketState createState() => _TicketState();
+}
+
+class _TicketState extends State<Ticket> {
+  Shuttles selectedShuttle;
+  @override
+  void initState() {
+    selectedShuttle = Provider.of<Shuttles>(context, listen: false);
+    print(widget.shuttle.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +58,7 @@ class Ticket extends StatelessWidget {
               height: 10,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10,right: 10),
+              padding: EdgeInsets.only(left: 10, right: 10),
               child: Row(
                 children: [
                   Text(
@@ -67,12 +81,15 @@ class Ticket extends StatelessWidget {
                 ],
               ),
             ),
-             Padding(
-              padding: EdgeInsets.only(left: 10,right: 10),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
               child: Row(
                 children: [
                   Text(
-                    "Bus Registration Number",
+                    "${widget.shuttle.regNo}",
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -82,7 +99,7 @@ class Ticket extends StatelessWidget {
                     child: Container(),
                   ),
                   Text(
-                    "Seat Number",
+                    "${widget.shuttle.seats}",
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -90,21 +107,22 @@ class Ticket extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+            RaisedGradientButton(
+                width: 200,
+                child: Text(
+                  'Confirm Order',
+                  style: TextStyle(color: Colors.white),
+                ),
+                gradient: LinearGradient(
+                  colors: <Color>[Colors.purple[800], Colors.purple],
+                ),
+                onPressed: () {
+                    
+                }),
           ]),
         ),
       ),
-    );
-  }
-}
-
-class name extends StatelessWidget {
-  const name({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [],
     );
   }
 }
