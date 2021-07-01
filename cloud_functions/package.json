@@ -1,0 +1,11 @@
+{
+  "name": "cloud_functions",
+  "version": "1.0.0",
+  "description": "cloud function for shuttler application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "V-Ghost",
+  "license": "ISC"
+}

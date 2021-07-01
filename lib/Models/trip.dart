@@ -5,7 +5,7 @@ class Trip extends ChangeNotifier {
 
   String seat;
   String status;
-  String timeStamp;
+  DateTime timeStamp;
   Trip();
   Trip get instance => this;
   Trip.fromMap(Map<String, dynamic> data) {

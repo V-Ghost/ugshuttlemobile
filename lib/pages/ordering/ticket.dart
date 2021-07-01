@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
+import 'package:shuttleuserapp/services/database.dart';
 import 'package:shuttleuserapp/widgets/raisedGradientButton.dart';
 import 'package:shuttleuserapp/widgets/seats.dart';
 
@@ -13,9 +15,11 @@ class Ticket extends StatefulWidget {
 
 class _TicketState extends State<Ticket> {
   Shuttles selectedShuttle;
+  
   @override
   void initState() {
     selectedShuttle = Provider.of<Shuttles>(context, listen: false);
+
     print(widget.shuttle.id);
     super.initState();
   }
@@ -108,6 +112,9 @@ class _TicketState extends State<Ticket> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 30,
+            ),
             RaisedGradientButton(
                 width: 200,
                 child: Text(
@@ -117,8 +124,25 @@ class _TicketState extends State<Ticket> {
                 gradient: LinearGradient(
                   colors: <Color>[Colors.purple[800], Colors.purple],
                 ),
-                onPressed: () {
-                    
+                onPressed: ()async {
+                  await DatabaseService().getSettings();
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('This trip carries a charge'),
+                      content: const Text('You are required'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
                 }),
           ]),
         ),

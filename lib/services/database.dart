@@ -83,6 +83,19 @@ class DatabaseService {
 
     return shuttlesList;
   }
+
+  Future<dynamic> getSettings() async {
+   
+     final databaseReference = FirebaseDatabase.instance
+        .reference().child("price");
+       
+    final myData = databaseReference;
+
+    DataSnapshot snapshot = await myData.once();
+    print("finally");
+    print(snapshot.value);
+
+  }
   
 
   Future<dynamic> createTrip(Trip u) async{
@@ -92,7 +105,7 @@ class DatabaseService {
         'shuttle': u.shuttle,
         'seat': u.seat,
         'status': u.status,
-         'timestamp': u.timeStamp,
+        'timestamp': u.timeStamp,
       });
       return true;
     } catch (error) {

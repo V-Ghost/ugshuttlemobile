@@ -19,7 +19,7 @@ class Shuttles extends ChangeNotifier {
     model = data['model'];
     seats = data['seats'];
     lastMaintenance = data['lastMaintenance'].toString();
-     regNo = data['regNo'];
+     regNo = data['id'];
     notifyListeners();
   }
 }
