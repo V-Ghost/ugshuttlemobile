@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:cloud_functions/cloud_functions.dart';
@@ -25,7 +26,6 @@ class DatabaseService {
 
   Future<dynamic> updateUserData(Users u) async {
     try {
-      
       await userCollection.doc(uid).set({
         'name': u.userName,
         'indexNo': u.uid,
@@ -37,24 +37,22 @@ class DatabaseService {
     }
   }
 
-
- Future<dynamic> getBusStops() async {
-   var busStopsList = [];
+  Future<dynamic> getBusStops() async {
+    var busStopsList = [];
     var busStops =
-       await FirebaseFirestore.instance.collection('busStops').get(); 
+        await FirebaseFirestore.instance.collection('busStops').get();
 
-     busStops.docs.forEach((shuttle) {
-       Shuttles temp = Shuttles.fromMap(shuttle.data());
-       
+    busStops.docs.forEach((shuttle) {
+      Shuttles temp = Shuttles.fromMap(shuttle.data());
+
       busStopsList.add(temp);
     });
 
     return busStopsList;
- }
+  }
+
   Future<dynamic> updatelocation(Position position) async {
-   
-        try {
-          
+    try {
       await userCollection.doc(uid).update({
         'latitude': position.latitude,
         'longitude': position.longitude,
@@ -71,13 +69,12 @@ class DatabaseService {
   // }
 
   Future<dynamic> getShuttles() async {
-   
     var shuttlesList = [];
     var shuttles =
         await FirebaseFirestore.instance.collection('shuttles').get();
     shuttles.docs.forEach((shuttle) {
-       Shuttles temp = Shuttles.fromMap(shuttle.data());
-       
+      Shuttles temp = Shuttles.fromMap(shuttle.data());
+
       shuttlesList.add(temp);
     });
 
@@ -85,27 +82,27 @@ class DatabaseService {
   }
 
   Future<dynamic> getSettings() async {
-   
-     final databaseReference = FirebaseDatabase.instance
-        .reference().child("price");
-       
+    final databaseReference =
+        FirebaseDatabase.instance.reference().child("price");
+
     final myData = databaseReference;
 
     DataSnapshot snapshot = await myData.once();
     print("finally");
     print(snapshot.value);
-
   }
-  
 
-  Future<dynamic> createTrip(Trip u) async{
-       try {
-       var uuid = Uuid();
+  Future<dynamic> createTrip(Trip u) async {
+    try {
+      var uuid = Uuid();
       await userCollection.doc(uid).collection("trips").doc(uuid.v1()).set({
         'shuttle': u.shuttle,
         'seat': u.seat,
         'status': u.status,
         'timestamp': u.timeStamp,
+        'latitude': u.busStop.latitude,
+        'longitude': u.busStop.longitude,
+        'id': uuid.v1(),
       });
       return true;
     } catch (error) {
@@ -114,8 +111,52 @@ class DatabaseService {
     }
   }
 
+  Future<dynamic> triggerBusStop(Trip t) async {
+    try {
+      print(t.shuttle);
+      var uuid = Uuid();
+      await FirebaseFirestore.instance
+          .collection('triggers')
+          .doc(t.shuttle)
+          .set({"trigger": "true"});
+      Future.delayed(const Duration(milliseconds: 3000), () async {
+        await FirebaseFirestore.instance
+            .collection('triggers')
+            .doc(t.shuttle)
+            .set({"trigger": "false"});
+      });
 
+      return true;
+    } catch (error) {
+      print(error.toString());
+      return error.toString();
+    }
+  }
 
+  Future<dynamic> checkIfThereIsPendingOrder() async {
+    try {
+      Trip temp = Trip();
+      var order = await userCollection
+          .doc(uid)
+          .collection("trips")
+          .where("status", isEqualTo: "current")
+          .get();
+      order.docs.forEach((trip) {
+        print(trip.data());
+        temp = Trip.fromMap(trip.data());
+      });
+      print(order.size);
+      print(temp.id);
+      if (order.size == 0) {
+        return false;
+      } else {
+        return temp;
+      }
+    } catch (error) {
+      print(error.toString());
+      return error.toString();
+    }
+  }
 
   Future<void> saveDeviceToken() async {
     final FirebaseMessaging _fcm = FirebaseMessaging.instance;
@@ -135,7 +176,6 @@ class DatabaseService {
     }
   }
 
-  
   Future<dynamic> sendNotification(
       String from, String to, String message, String type) async {
     try {

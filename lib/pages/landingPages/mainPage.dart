@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:shuttleuserapp/main.dart';
-import 'package:shuttleuserapp/pages/navBarPages/brimPage.dart';
 
 import 'package:shuttleuserapp/pages/navBarPages/pay.dart';
 import 'package:shuttleuserapp/pages/navBarPages/history.dart';
@@ -50,7 +49,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   StreamSubscription iosSubscription;
   @override
   void initState() {
-     user = FirebaseAuth.instance.currentUser;
+    user = FirebaseAuth.instance.currentUser;
     //  _firebaseMessaging.configure(
     //   onMessage: (Map<String, dynamic> message) async {
     //     // final notification = message['notification'];
@@ -76,7 +75,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     //     // );
     //   },
     // );
-      
+
     //   },
     //   onLaunch: (Map<String, dynamic> message) async {
     //     // final notification = message['data'];
@@ -128,7 +127,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     //   'status': 'offline',
     //   'lastChanged': DateTime.now().toUtc().toString()
     // }).then((_) async {});
-    
+
     super.initState();
   }
 
@@ -171,9 +170,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
 
       // permission = await Geolocator.requestPermission();
       positionStream = Geolocator.getPositionStream(
-              desiredAccuracy: LocationAccuracy.best , distanceFilter: 5 )
+              desiredAccuracy: LocationAccuracy.best, distanceFilter: 5)
           .listen((Position position) {
-         
         DatabaseService(uid: user.uid).updatelocation(position);
       });
     } else {
@@ -264,7 +262,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           //   },
           // ),
           body: MapPage(),
-          
+
           // Center(
           //   child: _widgetOptions.elementAt(_selectedIndex),
           // ),

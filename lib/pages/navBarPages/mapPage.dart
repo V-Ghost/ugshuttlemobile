@@ -13,7 +13,9 @@ import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
+import 'package:shuttleuserapp/Models/trip.dart';
 import 'package:shuttleuserapp/Models/users.dart';
+import 'package:shuttleuserapp/pages/navBarPages/ordering/receipt.dart';
 
 import 'package:shuttleuserapp/pages/register/loginUi.dart';
 // import 'package:shuttleuserapp/pages/sendBrims.dart';
@@ -205,20 +207,57 @@ class _MapPageState extends State<MapPage> {
           fabOpenColor: Colors.white,
           children: <Widget>[
             IconButton(
-                icon:
-                    Icon(Icons.airplane_ticket, size: 35, color: Colors.white),
-                onPressed: () {}),
+                icon: Icon(Icons.alarm, size: 35, color: Colors.white),
+                onPressed: () async {
+                  var t = await DatabaseService(uid: user.uid)
+                      .checkIfThereIsPendingOrder();
+                  print(t);
+                  if (t is Trip) {
+                    await DatabaseService(uid: user.uid).triggerBusStop(t);
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: " Sorry :( you have no current trips ongoing.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 3,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+                }),
+            IconButton(
+                icon: Icon(Icons.receipt, size: 35, color: Colors.white),
+                onPressed: () async {
+                  var t = await DatabaseService(uid: user.uid)
+                      .checkIfThereIsPendingOrder();
+                  print(t);
+                  if (t is Trip) {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => Receipt(
+                                trip: t,
+                              )),
+                    );
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: " Sorry :( you have no current trips ongoing.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 3,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+                }),
             IconButton(
                 icon: Icon(Icons.bus_alert_rounded,
                     size: 35, color: Colors.white),
                 onPressed: () {
-                 
                   int i = 0;
                   double temp = 0;
                   Shuttles tempShuttle;
                   shuttles.forEach((shuttle) {
-                   
-
                     double distancefrom = Geolocator.distanceBetween(
                         position.latitude,
                         position.longitude,
@@ -226,25 +265,27 @@ class _MapPageState extends State<MapPage> {
                         shuttle.longitude);
                     if (i == 0) {
                       temp = distancefrom;
+                      selectedShuttle = shuttle;
                     }
-                    //  print(distancefrom);
+                    print(distancefrom);
                     if (temp > distancefrom) {
                       temp = distancefrom;
                       selectedShuttle = shuttle;
                       // print(shuttle.id);
-                      // print(selectedShuttle.id);
+                      print(selectedShuttle.id);
                     }
                     i++;
                   });
-                 
-                  if (temp < 400) {
-                   
+
+                  if (temp < 4000) {
                     showModalBottomSheet<void>(
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       builder: (BuildContext context) {
-                        return DestinationBottomSheet(shuttle: selectedShuttle,);
+                        return DestinationBottomSheet(
+                          shuttle: selectedShuttle,
+                        );
                       },
                     );
                   } else {

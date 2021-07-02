@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:shuttleuserapp/Models/BusStops.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
 import 'package:shuttleuserapp/Models/users.dart';
-import 'package:shuttleuserapp/pages/ordering/ticket.dart';
+import 'package:shuttleuserapp/pages/navBarPages/ordering/ticket.dart';
 
 class DestinationBottomSheet extends StatefulWidget {
   final Shuttles shuttle;
-  DestinationBottomSheet({Key key,@required this.shuttle}) : super(key: key);
+  DestinationBottomSheet({Key key, @required this.shuttle}) : super(key: key);
 
   _DestinationBottomSheetState createState() => _DestinationBottomSheetState();
 }
@@ -17,9 +17,14 @@ class DestinationBottomSheet extends StatefulWidget {
 class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
   var busStopsList = [];
   Users user;
+  Shuttles selectedShuttle;
+
   @override
   void initState() {
     user = Provider.of<Users>(context, listen: false);
+
+    selectedShuttle = Provider.of<Shuttles>(context, listen: false);
+
     super.initState();
   }
 
@@ -29,10 +34,10 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
 
     busStops.docs.forEach((busStop) {
       BusStops temp = BusStops.fromMap(busStop.data());
-     
+
       busStopsList.add(temp);
     });
-    
+
     return busStopsList;
   }
 
@@ -91,10 +96,15 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
                                       title: Text(busStopsList[index].name),
                                       subtitle: Text(busStopsList[index].sub),
                                       onTap: () {
+                                        selectedShuttle = widget.shuttle;
                                         Navigator.push(
                                           context,
                                           CupertinoPageRoute(
-                                              builder: (context) => Ticket(shuttle: widget.shuttle,)),
+                                              builder: (context) => Ticket(
+                                                    busStop:
+                                                        busStopsList[index],
+                                                    shuttle: widget.shuttle,
+                                                  )),
                                         );
                                       }),
                                 ));

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shuttleuserapp/Models/users.dart';
 import 'package:shuttleuserapp/pages/landingPages/homepage.dart';
-import 'package:shuttleuserapp/pages/register/userDetails/registration3.dart';
 import 'package:shuttleuserapp/services/database.dart';
 import 'package:shuttleuserapp/widgets/raisedGradientButton.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,7 +56,6 @@ class _Registration1State extends State<Registration1> {
                   duration: Duration(milliseconds: 1500),
                   child: RotatedBox(
                     quarterTurns: 0,
-                   
                   ),
                 ),
               ),
@@ -148,6 +146,7 @@ class _Registration1State extends State<Registration1> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               u.uid = _bioController.text;
+
                               dynamic result =
                                   await DatabaseService(uid: user.uid)
                                       .updateUserData(u);

@@ -45,6 +45,7 @@ dependencies:
   qr_flutter: ^4.0.0
   geolocator: ^7.0.3
   flutter_signin_button: ^2.0.0
+  nfc_in_flutter: ^2.0.5
   
 
 dev_dependencies:
