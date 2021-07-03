@@ -68,6 +68,7 @@ flutter:
    - lib/images/icon.jpg
    - lib/images/brim0.png
    - lib/images/brimPointer.png
+   - lib/images/nfc.png
    - assets/json_assets/map_style.txt
   fonts:
    

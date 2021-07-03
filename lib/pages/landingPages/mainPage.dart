@@ -147,17 +147,6 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   }
 
   _listenForLocation(BuildContext context) async {
-    // SharedPreferences myPrefs = await SharedPreferences.getInstance();
-    // String location = myPrefs.getString("location");
-    // print(location);
-    // if (myPrefs.getString("location") != null) {
-    //   final databaseReference =
-    //       FirebaseDatabase.instance.reference().child("userInfo").child(location).child(user.uid);
-    //   databaseReference.onValue.listen((data) {
-    //     print("it change ooo");
-    //   });
-    // }
-
     isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationServiceEnabled) {
       // setState(() {
@@ -168,10 +157,23 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         _dialog = null;
       }
 
+      var geolocator = Geolocator();
+// var options = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+
+      Geolocator.getPositionStream(
+              desiredAccuracy: LocationAccuracy.best, distanceFilter: 1)
+          .listen((position) {
+        var speedInMps = position.speed;
+
+        print(speedInMps);
+        DatabaseService(uid: user.uid).updateSpeed(speedInMps);
+      });
+
       // permission = await Geolocator.requestPermission();
       positionStream = Geolocator.getPositionStream(
-              desiredAccuracy: LocationAccuracy.best, distanceFilter: 5)
+              desiredAccuracy: LocationAccuracy.best, distanceFilter: 1)
           .listen((Position position) {
+        print(position.latitude);
         DatabaseService(uid: user.uid).updatelocation(position);
       });
     } else {

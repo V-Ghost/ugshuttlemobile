@@ -211,7 +211,7 @@ class _MapPageState extends State<MapPage> {
                 onPressed: () async {
                   var t = await DatabaseService(uid: user.uid)
                       .checkIfThereIsPendingOrder();
-                  print(t);
+
                   if (t is Trip) {
                     await DatabaseService(uid: user.uid).triggerBusStop(t);
                   } else {
@@ -230,7 +230,7 @@ class _MapPageState extends State<MapPage> {
                 onPressed: () async {
                   var t = await DatabaseService(uid: user.uid)
                       .checkIfThereIsPendingOrder();
-                  print(t);
+
                   if (t is Trip) {
                     Navigator.push(
                       context,
@@ -267,12 +267,11 @@ class _MapPageState extends State<MapPage> {
                       temp = distancefrom;
                       selectedShuttle = shuttle;
                     }
-                    print(distancefrom);
+
                     if (temp > distancefrom) {
                       temp = distancefrom;
                       selectedShuttle = shuttle;
                       // print(shuttle.id);
-                      print(selectedShuttle.id);
                     }
                     i++;
                   });

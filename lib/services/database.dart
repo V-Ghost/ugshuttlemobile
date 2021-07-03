@@ -64,6 +64,18 @@ class DatabaseService {
     }
   }
 
+  Future<dynamic> updateSpeed(double speed) async {
+    try {
+      await userCollection.doc(uid).update({
+        'speed': speed,
+      });
+      return true;
+    } catch (error) {
+      print(error.toString());
+      return error.toString();
+    }
+  }
+
   // Future<dynamic> getAvaliableShuttle(Array<Shuttle){
 
   // }
