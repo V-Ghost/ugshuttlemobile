@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:shuttleuserapp/Models/CoOrdinates.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
 import 'package:shuttleuserapp/Models/trip.dart';
-
+import 'package:nanoid/nanoid.dart';
 import 'package:shuttleuserapp/Models/userInfo.dart';
 import 'package:shuttleuserapp/Models/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -106,16 +105,22 @@ class DatabaseService {
 
   Future<dynamic> createTrip(Trip u) async {
     try {
+      var custom_length_id = nanoid(10);
+      print(custom_length_id);
+      // var id = MinId.getId();
       var uuid = Uuid();
-      await userCollection.doc(uid).collection("trips").doc(uuid.v1()).set({
-        'shuttle': u.shuttle,
-        'seat': u.seat,
-        'status': u.status,
-        'timestamp': u.timeStamp,
-        'latitude': u.busStop.latitude,
-        'longitude': u.busStop.longitude,
-        'id': uuid.v1(),
-      });
+      await FirebaseFirestore.instance.collection("trips").doc(custom_length_id)
+        ..set({
+          'shuttle': u.shuttle,
+          'seat': u.seat,
+          'status': u.status,
+          'timestamp': u.timeStamp,
+          'latitude': u.busStop.latitude,
+          'longitude': u.busStop.longitude,
+          'id': custom_length_id,
+          'user': this.uid
+        });
+
       return true;
     } catch (error) {
       print(error.toString());
@@ -148,10 +153,10 @@ class DatabaseService {
   Future<dynamic> checkIfThereIsPendingOrder() async {
     try {
       Trip temp = Trip();
-      var order = await userCollection
-          .doc(uid)
+      var order = await FirebaseFirestore.instance
           .collection("trips")
-          .where("status", isEqualTo: "current")
+          .where("status", isEqualTo: "booked")
+          .where("user", isEqualTo: this.uid)
           .get();
       order.docs.forEach((trip) {
         print(trip.data());
@@ -169,6 +174,55 @@ class DatabaseService {
       return error.toString();
     }
   }
+
+  Future<dynamic> checkIfThereIsOrder() async {
+    try {
+      Trip temp = Trip();
+      var order = await FirebaseFirestore.instance
+          .collection("trips")
+          .where("status", isEqualTo: "booked")
+          .where("user", isEqualTo: this.uid)
+          .get();
+
+      var order1 = await FirebaseFirestore.instance
+          .collection("trips")
+          .where("status", isEqualTo: "ongoing")
+          .where("user", isEqualTo: this.uid)
+          .get();
+      // order.docs.forEach((trip) {
+      //   print(trip.data());
+      //   temp = Trip.fromMap(trip.data());
+      // });
+      print(order.size);
+      print(order1.size);
+      if (order.size == 0 && order1.size == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      print(error.toString());
+      return error.toString();
+    }
+  }
+
+  numberOfSeats(String shuttleId) async {
+    try {
+      var result = await FirebaseFirestore.instance
+          .collection('shuttles')
+          .doc(shuttleId)
+          .collection("seats")
+          .where("available", isEqualTo: "true")
+          .get();
+
+      return result.size;
+    } catch (error) {
+      print(error.toString());
+      return error.toString();
+    }
+  }
+
+  Future<dynamic> getTicket() {}
 
   Future<void> saveDeviceToken() async {
     final FirebaseMessaging _fcm = FirebaseMessaging.instance;

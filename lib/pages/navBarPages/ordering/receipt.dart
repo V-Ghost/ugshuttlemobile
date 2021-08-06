@@ -78,7 +78,7 @@ class _ReceiptState extends State<Receipt> {
                 height: 15,
               ),
               QrImage(
-                data: "google.com",
+                data: widget.trip.id,
                 version: 1,
                 size: 320,
                 gapless: false,
@@ -96,8 +96,8 @@ class _ReceiptState extends State<Receipt> {
               SizedBox(
                 height: 80,
               ),
-              // _supportsNFC
-              true
+              _supportsNFC
+                  // true
                   ? RaisedGradientButton(
                       width: 200,
                       child: Text(
@@ -109,7 +109,7 @@ class _ReceiptState extends State<Receipt> {
                       ),
                       onPressed: () async {
                         NDEFMessage newMessage = NDEFMessage.withRecords(
-                            [NDEFRecord.plain("scanned")]);
+                            [NDEFRecord.plain(widget.trip.id)]);
                         Stream<NDEFTag> stream =
                             NFC.writeNDEF(newMessage, once: true);
 
@@ -131,7 +131,7 @@ class _ReceiptState extends State<Receipt> {
                               );
                             });
                       })
-                  : null,
+                  : Container(),
             ],
           ),
         ),

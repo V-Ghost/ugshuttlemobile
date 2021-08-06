@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shuttleuserapp/Models/BusStops.dart';
 import 'package:shuttleuserapp/Models/shuttles.dart';
 import 'package:shuttleuserapp/Models/users.dart';
 import 'package:shuttleuserapp/pages/navBarPages/ordering/ticket.dart';
+import 'package:shuttleuserapp/services/database.dart';
 
 class DestinationBottomSheet extends StatefulWidget {
   final Shuttles shuttle;
@@ -95,17 +97,32 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
                                       leading: const Icon(Icons.location_on),
                                       title: Text(busStopsList[index].name),
                                       subtitle: Text(busStopsList[index].sub),
-                                      onTap: () {
+                                      onTap: () async {
                                         selectedShuttle = widget.shuttle;
-                                        Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                              builder: (context) => Ticket(
-                                                    busStop:
-                                                        busStopsList[index],
-                                                    shuttle: widget.shuttle,
-                                                  )),
-                                        );
+                                        var result = await DatabaseService()
+                                            .numberOfSeats(widget.shuttle.id);
+                                        if (result > 0) {
+                                          print(result);
+                                          Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) => Ticket(
+                                                      busStop:
+                                                          busStopsList[index],
+                                                      shuttle: widget.shuttle,
+                                                    )),
+                                          );
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  " Sorry :( No avaliable seats on this shuttle",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 3,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                        }
                                       }),
                                 ));
                           }),

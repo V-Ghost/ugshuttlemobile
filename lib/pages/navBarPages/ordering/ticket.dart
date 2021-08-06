@@ -185,7 +185,7 @@ class _TicketState extends State<Ticket> {
                   t.seat = "Br-3";
                   t.shuttle = widget.shuttle.id;
                   t.busStop = widget.busStop;
-                  t.status = "current";
+                  t.status = "booked";
 
                   t.timeStamp = DateTime.now();
                   await DatabaseService(

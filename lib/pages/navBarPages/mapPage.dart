@@ -253,43 +253,57 @@ class _MapPageState extends State<MapPage> {
             IconButton(
                 icon: Icon(Icons.bus_alert_rounded,
                     size: 35, color: Colors.white),
-                onPressed: () {
-                  int i = 0;
-                  double temp = 0;
-                  Shuttles tempShuttle;
-                  shuttles.forEach((shuttle) {
-                    double distancefrom = Geolocator.distanceBetween(
-                        position.latitude,
-                        position.longitude,
-                        shuttle.latitude,
-                        shuttle.longitude);
-                    if (i == 0) {
-                      temp = distancefrom;
-                      selectedShuttle = shuttle;
-                    }
+                onPressed: () async {
+                  var check = await DatabaseService(uid: user.uid)
+                      .checkIfThereIsOrder();
+                  print(check);
+                  if (check == true) {
+                    int i = 0;
+                    double temp = 0;
+                    Shuttles tempShuttle;
+                    shuttles.forEach((shuttle) {
+                      double distancefrom = Geolocator.distanceBetween(
+                          position.latitude,
+                          position.longitude,
+                          shuttle.latitude,
+                          shuttle.longitude);
+                      if (i == 0) {
+                        temp = distancefrom;
+                        selectedShuttle = shuttle;
+                      }
 
-                    if (temp > distancefrom) {
-                      temp = distancefrom;
-                      selectedShuttle = shuttle;
-                      // print(shuttle.id);
-                    }
-                    i++;
-                  });
+                      if (temp > distancefrom) {
+                        temp = distancefrom;
+                        selectedShuttle = shuttle;
+                        // print(shuttle.id);
+                      }
+                      i++;
+                    });
 
-                  if (temp < 4000) {
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (BuildContext context) {
-                        return DestinationBottomSheet(
-                          shuttle: selectedShuttle,
-                        );
-                      },
-                    );
+                    if (temp < 4000) {
+                      showModalBottomSheet<void>(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (BuildContext context) {
+                          return DestinationBottomSheet(
+                            shuttle: selectedShuttle,
+                          );
+                        },
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: " Sorry :( there are buses near you.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 3,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
                   } else {
                     Fluttertoast.showToast(
-                        msg: " Sorry :( there are buses near you.",
+                        msg: " Sorry :( you have a pending trip",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 3,
@@ -299,23 +313,23 @@ class _MapPageState extends State<MapPage> {
                   }
                 }),
           ]),
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 2,
-              backgroundImage: AssetImage(
-                'lib/images/brim0.png',
-              ),
-              backgroundColor: Colors.black,
-            ),
-          ),
-        ),
-        backgroundColor: Colors.white,
-        title: const Text('Shuttler', style: TextStyle(color: Colors.black)),
-      ),
+      // appBar: AppBar(
+      //   leading: GestureDetector(
+      //     onTap: () {},
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(8.0),
+      //       child: CircleAvatar(
+      //         radius: 2,
+      //         backgroundImage: AssetImage(
+      //           'lib/images/brim0.png',
+      //         ),
+      //         backgroundColor: Colors.black,
+      //       ),
+      //     ),
+      //   ),
+      //   backgroundColor: Colors.white,
+      //   title: const Text('Shuttler', style: TextStyle(color: Colors.black)),
+      // ),
       body: _initialPosition == null
           ? Container(
               child: Center(
