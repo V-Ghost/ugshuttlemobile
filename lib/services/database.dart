@@ -215,7 +215,11 @@ class DatabaseService {
           .where("available", isEqualTo: "true")
           .get();
 
-      return result.size;
+      if (result.size > 0) {
+        return result.docs[0].id;
+      } else {
+        return false;
+      }
     } catch (error) {
       print(error.toString());
       return error.toString();

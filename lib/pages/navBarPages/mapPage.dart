@@ -281,6 +281,7 @@ class _MapPageState extends State<MapPage> {
                     });
 
                     if (temp < 4000) {
+                      selectedShuttle.distance = temp;
                       showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,

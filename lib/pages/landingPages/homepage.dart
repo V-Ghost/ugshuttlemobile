@@ -28,36 +28,7 @@ class _HomepageState extends State<Homepage> {
     SharedPreferences myPrefs = await SharedPreferences.getInstance();
     
     var query = await FirebaseFirestore.instance.collection('shuttleUsers').get();
-  //  query.docs.forEach((data) async{
-     
-  //   //print(data.data());
-  //   print("data");
-    //DatabaseService().sendNotification();
-    // var now = new DateTime.now();
-    // if(data.data().isNotEmpty) {
-     //if(DatabaseService().convertUTCToLocalDateTime(data.data()['latest'].toDate()).isBefore(now.subtract(Duration(days: 1))) ){
-    //  print("delting here");
-    //  print(data.id);
-     
-    //   var query = await FirebaseFirestore.instance.collection('chats').doc(data.id).collection("messages").get();
-    //   query.docs.forEach((doc){
-    //  FirebaseFirestore.instance.collection('chats').doc(data.id).collection("messages").doc(doc.id).delete();
-    //   });
-    //    FirebaseFirestore.instance.collection('chats').doc(data.id).delete();
-      // print("eii hun");
-      // print(query.;
-     
-      // query.data().forEach((key,value){
-      //     print("ma deletii");
-      //     print(key);
-      //     print(value);
-      // });
-    
-    //}
-   // }
-    //var nextCheck = new DateTime(now  .getYear(), now.getMonth(), now.getDate() + 1);
-   
-  // });
+  
     if (myPrefs.getBool('loggedIn')) {
       Users temp;
       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance

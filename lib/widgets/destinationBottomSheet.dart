@@ -101,18 +101,10 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
                                         selectedShuttle = widget.shuttle;
                                         var result = await DatabaseService()
                                             .numberOfSeats(widget.shuttle.id);
-                                        if (result > 0) {
+
+                                        
+                                        if (result == false) {
                                           print(result);
-                                          Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                                builder: (context) => Ticket(
-                                                      busStop:
-                                                          busStopsList[index],
-                                                      shuttle: widget.shuttle,
-                                                    )),
-                                          );
-                                        } else {
                                           Fluttertoast.showToast(
                                               msg:
                                                   " Sorry :( No avaliable seats on this shuttle",
@@ -122,6 +114,17 @@ class _DestinationBottomSheetState extends State<DestinationBottomSheet> {
                                               backgroundColor: Colors.red,
                                               textColor: Colors.white,
                                               fontSize: 16.0);
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) => Ticket(
+                                                      SeatId: result,
+                                                      busStop:
+                                                          busStopsList[index],
+                                                      shuttle: widget.shuttle,
+                                                    )),
+                                          );
                                         }
                                       }),
                                 ));

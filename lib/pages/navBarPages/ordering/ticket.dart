@@ -11,7 +11,12 @@ import 'package:shuttleuserapp/widgets/raisedGradientButton.dart';
 class Ticket extends StatefulWidget {
   final Shuttles shuttle;
   final BusStops busStop;
-  Ticket({Key key, @required this.shuttle, @required this.busStop})
+  final String SeatId;
+  Ticket(
+      {Key key,
+      @required this.shuttle,
+      @required this.busStop,
+      @required this.SeatId})
       : super(key: key);
 
   _TicketState createState() => _TicketState();
@@ -19,10 +24,12 @@ class Ticket extends StatefulWidget {
 
 class _TicketState extends State<Ticket> {
   Shuttles selectedShuttle;
+  double time;
 
   @override
   void initState() {
     selectedShuttle = Provider.of<Shuttles>(context, listen: false);
+    time = widget.shuttle.distance / widget.shuttle.speed;
 
     super.initState();
   }
@@ -120,7 +127,7 @@ class _TicketState extends State<Ticket> {
                     child: Container(),
                   ),
                   Text(
-                    "${widget.shuttle.seats}",
+                    "${widget.SeatId}",
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -136,7 +143,7 @@ class _TicketState extends State<Ticket> {
               padding: EdgeInsets.only(left: 10, right: 10),
               child: Center(
                 child: Text(
-                  "Estimated Arrival Time : xx",
+                  "Estimated Arrival Time " + time.toString(),
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

@@ -7,7 +7,9 @@ class Shuttles extends ChangeNotifier {
   double longitude;
   String mileage;
   String model;
+  double distance;
   String seats;
+  int speed;
   String regNo;
   Shuttles();
   Shuttles get instance => this;
@@ -17,6 +19,7 @@ class Shuttles extends ChangeNotifier {
     longitude = data['longitude'];
     mileage = data['mileage'];
     model = data['model'];
+    speed = data['speed'];
     seats = data['seats'];
     lastMaintenance = data['lastMaintenance'].toString();
     regNo = data['id'];
